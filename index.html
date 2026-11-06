@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GeneGuard — Decode your genes. Understand your health.</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#F2F7F8;--panel:#fff;--ink:#0A1628;--mut:#52657a;--line:#d5e2e6;--teal:#0d9488;--cyan:#0891b2;--warn:#c2410c;--A:#0d9488;--C:#0891b2;--G:#6366f1;--T:#d97706;--sh:0 1px 2px rgba(10,22,40,.06);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#07101f;--panel:#0d1b30;--ink:#e6f1f5;--mut:#8fa5b8;--line:#1b2f48;--teal:#2dd4bf;--cyan:#22d3ee;--warn:#fb923c;--A:#2dd4bf;--C:#22d3ee;--G:#a5b4fc;--T:#fbbf24;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#07101f;--panel:#0d1b30;--ink:#e6f1f5;--mut:#8fa5b8;--line:#1b2f48;--teal:#2dd4bf;--cyan:#22d3ee;--warn:#fb923c;--A:#2dd4bf;--C:#22d3ee;--G:#a5b4fc;--T:#fbbf24;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.6 'IBM Plex Sans',system-ui,sans-serif}
+h1,h2,h3{font-family:'Bricolage Grotesque','IBM Plex Sans',sans-serif;margin:0;letter-spacing:-.02em}
+a{color:var(--cyan)}button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+nav{border-right:1px solid var(--line);padding:20px 12px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:2px}
+.logo{font:800 22px 'Bricolage Grotesque';padding:0 10px 18px;display:flex;gap:8px;align-items:center}
+nav a{padding:8px 10px;border-radius:8px;color:var(--mut);text-decoration:none;font-weight:500}
+nav a:hover{background:var(--panel)}nav a.on{background:var(--panel);color:var(--ink);box-shadow:inset 3px 0 var(--teal)}
+nav .sp{flex:1}main{padding:28px clamp(16px,4vw,48px) 60px;max-width:1040px;width:100%}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--sh)}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}.g4{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.mut{color:var(--mut)}.sm{font-size:13px}
+.btn{background:var(--teal);color:#04201c;border:0;border-radius:9px;padding:9px 16px;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+input,textarea,select{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+textarea{font-family:ui-monospace,Menlo,monospace;font-size:13px;resize:vertical}
+label{display:block;font-weight:600;font-size:13px;margin:10px 0 4px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.row>*{flex:1;min-width:130px}.row>.btn{flex:0 0 auto}
+.hero{padding:8px 0 26px}.hero h1{font-size:clamp(34px,6vw,58px);line-height:1.02;font-weight:800;max-width:14ch}
+.hero p{max-width:56ch;color:var(--mut);font-size:17px}
+.strand{display:flex;gap:3px;flex-wrap:wrap;margin:18px 0 8px}
+.b{width:24px;height:30px;border-radius:6px;display:grid;place-items:center;font:600 13px ui-monospace,monospace;color:#04201c}
+.bA{background:var(--A)}.bC{background:var(--C)}.bG{background:var(--G);color:#0A1628}.bT{background:var(--T);color:#1c1200}.bN{background:var(--line);color:var(--ink)}
+.stat b{font:800 30px 'Bricolage Grotesque';display:block}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;border:1px solid var(--line);color:var(--mut)}
+.tag.syn{color:var(--warn);border-color:var(--warn)}
+.note{border-left:3px solid var(--warn);padding:8px 12px;background:var(--bg);border-radius:0 8px 8px 0;font-size:13px;margin:12px 0}
+.bar{height:10px;border-radius:5px;background:var(--line);overflow:hidden;display:flex}
+pre{white-space:pre-wrap;word-break:break-all;background:var(--bg);padding:10px;border-radius:8px;font-size:12px;margin:4px 0}
+table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);font-size:14px}
+.gen{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding:12px;border-bottom:1px dashed var(--line)}
+.mem{border:1.5px solid var(--teal);border-radius:12px;padding:8px 14px;text-align:center;min-width:110px}
+.chat{max-height:340px;overflow:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.msg{padding:9px 13px;border-radius:12px;max-width:85%;background:var(--bg)}.msg.me{align-self:flex-end;background:var(--teal);color:#04201c}
+.sec{display:none}.sec.on{display:block}
+.sec h2{font-size:30px;margin-bottom:4px}.sec>p.mut{margin:0 0 18px}
+@media(max-width:760px){.app{grid-template-columns:1fr}nav{position:static;height:auto;flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:10px}.logo,nav .sp{display:none}nav a{white-space:nowrap}}
+@media print{nav,.noprint{display:none!important}.app{display:block}body{background:#fff;color:#000}.card{box-shadow:none}}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(620px 420px at 88% -5%,color-mix(in srgb,var(--cyan) 22%,transparent),transparent),radial-gradient(520px 420px at 4% 105%,color-mix(in srgb,var(--teal) 18%,transparent),transparent)}
+.hero{position:relative}.helix{position:absolute;right:0;top:0;width:150px;display:flex;flex-direction:column;gap:7px;pointer-events:none}
+.rg{display:flex;align-items:center;justify-content:space-between}.rg i{width:12px;height:12px;border-radius:50%}.rg u{flex:1;height:2px;margin:0 3px;background:var(--line)}
+.card{transition:transform .2s,border-color .2s}.card:hover{transform:translateY(-2px);border-color:var(--teal)}
+.chromo{position:relative;height:18px;border-radius:9px;background:var(--line);margin:8px 0 12px}.chromo::after{content:"";position:absolute;left:50%;top:-3px;width:10px;height:24px;margin-left:-5px;background:var(--panel);border-radius:5px}
+.chromo s{position:absolute;top:-7px;width:4px;height:32px;background:var(--warn);border-radius:2px;z-index:1;box-shadow:0 0 10px var(--warn)}
+.hb{display:flex;align-items:center;gap:10px;margin:6px 0}.hb span{width:90px}.hb div{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--teal),var(--cyan))}
+@media(max-width:760px){.helix{display:none}}
+@media (prefers-reduced-motion:no-preference){.b{animation:pop .5s both}@keyframes pop{from{transform:translateY(6px);opacity:0}}.rg{animation:tw 3.2s ease-in-out infinite}@keyframes tw{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.12)}}.sec.on{animation:in .35s both}@keyframes in{from{opacity:0;transform:translateY(8px)}}.hb div{animation:grow .8s both}@keyframes grow{from{width:0!important}}}
+</style></head><body>
+<div class="app">
+<nav aria-label="Main">
+<div class="logo"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--teal)"><path d="M6 2c0 8 14 8 14 11S6 18 6 24M20 2c0 8-14 8-14 11s14 5 14 11M8 7h10M8 19h10"/></svg>GeneGuard</div>
+<a href="#home" data-p="home">Overview</a><a href="#seq" data-p="seq">Sequence lab</a><a href="#genes" data-p="genes">Gene explorer</a><a href="#var" data-p="var">Variants</a><a href="#dis" data-p="dis">Disease associations</a><a href="#fam" data-p="fam">Family history</a><a href="#ask" data-p="ask">Assistant</a><a href="#rep" data-p="rep">Report</a><a href="#set" data-p="set">Settings</a>
+<div class="sp"></div><span class="sm mut" style="padding:0 10px">Educational use only</span>
+</nav>
+<main>
+
+<section class="sec" id="home"><div class="hero">
+<h1>Decode your genes. Understand your health.</h1>
+<p>Type or paste DNA below. GeneGuard reads it live: bases, GC content, reverse complement and protein translation, all computed in your browser. Nothing leaves this page.</p>
+<div class="strand" id="hs" aria-label="Live DNA strand"></div>
+<textarea id="hin" rows="2" aria-label="DNA sequence">ATGAGTAAAGGAGAAGAACTTTTCACTGGAGTTGTCCCAATTCTT</textarea>
+<div class="grid g4" style="margin-top:14px" id="hstats"></div></div>
+<div class="grid g4" style="margin-bottom:16px"><div class="card"><h3>1. Read</h3><p class="sm mut">Paste DNA or FASTA and see its bases, GC content and protein instantly.</p></div><div class="card"><h3>2. Explore</h3><p class="sm mut">Look up genes, see where they sit on their chromosome, and open public records.</p></div><div class="card"><h3>3. Learn</h3><p class="sm mut">Ask the assistant, map family history, and print a report with limits spelled out.</p></div></div>
+<div class="grid g2">
+<div class="card"><h3>Your demo profile</h3><p class="mut sm">Synthetic markers, labelled as such. No real genetic data is needed to explore.</p><div class="stat"><b id="nm">0</b>markers tracked</div><p><a href="#rep">Open report</a></p></div>
+<div class="card"><h3>What GeneGuard does and doesn’t do</h3><p class="sm mut">It teaches how genes, variants and inheritance work. It does not diagnose, predict your medical future, or replace a genetic counsellor.</p></div></div></section>
+
+<section class="sec" id="seq"><h2>Sequence lab</h2><p class="mut">Paste a DNA sequence or FASTA, or load a file. Basic sequence statistics do not identify disease.</p>
+<div class="card"><textarea id="sin" rows="5" aria-label="Sequence or FASTA">>sample_illustrative
+ATGAGTAAAGGAGAAGAACTTTTCACTGGAGTTGTCCCAATTCTTGTTGAATTAGATGGTGATGTT</textarea>
+<div class="row" style="margin-top:10px"><input type="file" id="sf" accept=".fa,.fasta,.txt" aria-label="FASTA file"><button class="btn" id="srun">Analyse</button></div></div>
+<div id="sout"></div></section>
+
+<section class="sec" id="genes"><h2>Gene explorer</h2><p class="mut">A small curated set of well-documented genes. For the full catalogue use NCBI Gene.</p>
+<div class="row"><div><label for="gq">Gene symbol</label><input id="gq" placeholder="BRCA1, CFTR, TP53…" list="gl"><datalist id="gl"></datalist></div></div>
+<div id="gout" style="margin-top:14px"></div></section>
+
+<section class="sec" id="var"><h2>Variant lookup</h2><p class="mut">Check an identifier’s format, learn the terms, then open the public record. Live ClinVar and Ensembl retrieval needs a backend service, which this build does not include.</p>
+<div class="card"><label for="vq">Variant identifier</label><div class="row"><input id="vq" placeholder="rs334  or  NM_000518.5:c.20A>T"><button class="btn" id="vgo">Check and open sources</button></div><div id="vout"></div></div>
+<div class="card" style="margin-top:16px"><h3>Terms</h3><table><tr><td><b>rsID</b></td><td>A dbSNP reference number for a known variant position, such as rs334.</td></tr><tr><td><b>Reference / alternate allele</b></td><td>Reference is the base in the reference genome; alternate is the different base seen in some people.</td></tr><tr><td><b>HGVS</b></td><td>A standard naming style, e.g. c. for coding DNA, p. for protein.</td></tr><tr><td><b>Classification</b></td><td>ClinVar labels range from benign to pathogenic, plus “uncertain significance”. Labels can change as evidence grows.</td></tr></table></div></section>
+
+<section class="sec" id="dis"><h2>Disease associations</h2><p class="mut">Three different ideas that are easy to confuse.</p>
+<div class="grid g2"><div class="card"><h3>Association</h3><p class="sm mut">A statistical link between a gene or variant and a condition in studies.</p></div><div class="card"><h3>Predisposition</h3><p class="sm mut">A higher or lower chance of developing a condition. Most people with a risk variant never develop it.</p></div><div class="card"><h3>Diagnosis</h3><p class="sm mut">Made by a clinician from symptoms, tests and history. Never by this app.</p></div></div>
+<div class="card" style="margin-top:16px"><table id="dtab"></table></div></section>
+
+<section class="sec" id="fam"><h2>Family history</h2><p class="mut">Map relatives and any conditions they reported. GeneGuard draws the tree and calculates no inheritance probabilities.</p>
+<div class="card"><div class="row"><div><label for="fr">Relation</label><select id="fr"><option>Grandparent</option><option>Parent</option><option>Aunt/Uncle</option><option>Self</option><option>Sibling</option><option>Child</option></select></div><div><label for="fnm">Name or label</label><input id="fnm"></div><div><label for="fc">Reported condition (optional)</label><input id="fc"></div><button class="btn" id="fadd">Add relative</button></div></div>
+<div class="card" style="margin-top:16px" id="ftree"></div></section>
+
+<section class="sec" id="ask"><h2>Assistant</h2><p class="mut">An offline educational assistant. It answers from a built-in glossary and the gene set above, and says so when it doesn’t know.</p>
+<div class="card"><div class="chat" id="chat" aria-live="polite"></div><div class="row"><input id="aq" placeholder="What is an allele? Tell me about CFTR." aria-label="Question"><button class="btn" id="ago">Ask</button></div></div></section>
+
+<section class="sec" id="rep"><h2>Report</h2><p class="mut">A printable summary of your demo profile.</p>
+<div class="card"><h3>Add a synthetic marker</h3><div class="row"><div><label for="mg">Gene</label><select id="mg"></select></div><div><label for="mn">Label</label><input id="mn" placeholder="e.g. Sample marker A"></div><button class="btn" id="madd">Add marker</button></div></div>
+<div class="card" style="margin-top:16px" id="rbody"></div>
+<p class="noprint"><button class="btn" id="rprint">Print or save as PDF</button></p></section>
+
+<section class="sec" id="set"><h2>Settings</h2><p class="mut">Everything is stored only in this browser.</p>
+<div class="card"><label for="th">Theme</label><select id="th"><option value="auto">Match system</option><option value="light">Light</option><option value="dark">Dark</option></select>
+<label><input type="checkbox" id="cons" style="width:auto"> I understand this is an educational tool and I will not enter real medical decisions here.</label>
+<p><button class="btn ghost" id="wipe">Delete all my data</button></p></div></section>
+</main></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const GENES={
+BRCA1:{n:"BRCA1 DNA repair associated",loc:"17q21.31",fn:"Tumour suppressor involved in repairing double-strand DNA breaks by homologous recombination.",pw:["DNA damage response","Homologous recombination"],d:"Hereditary breast and ovarian cancer",inh:"Autosomal dominant",note:"Harmful variants raise risk substantially but do not make cancer certain."},
+BRCA2:{n:"BRCA2 DNA repair associated",loc:"13q13.1",fn:"Helps load the repair protein RAD51 onto broken DNA during homologous recombination.",pw:["DNA damage response","Homologous recombination"],d:"Hereditary breast and ovarian cancer",inh:"Autosomal dominant",note:"Risk depends on the specific variant and on family history."},
+TP53:{n:"Tumour protein p53",loc:"17p13.1",fn:"Transcription factor that halts the cell cycle or triggers cell death after DNA damage.",pw:["p53 signalling","Apoptosis","Cell cycle control"],d:"Li-Fraumeni syndrome",inh:"Autosomal dominant",note:"Acquired TP53 changes in tumours are common and are not inherited."},
+CFTR:{n:"CF transmembrane conductance regulator",loc:"7q31.2",fn:"Chloride and bicarbonate channel in epithelial cells of lungs, pancreas and gut.",pw:["Ion transport","Epithelial fluid balance"],d:"Cystic fibrosis",inh:"Autosomal recessive",note:"A person needs two altered copies to have cystic fibrosis; one copy makes them a carrier."},
+HBB:{n:"Haemoglobin subunit beta",loc:"11p15.4",fn:"Encodes the beta chain of adult haemoglobin, which carries oxygen in red blood cells.",pw:["Oxygen transport"],d:"Sickle cell disease; beta-thalassaemia",inh:"Autosomal recessive",note:"Carrying one altered copy is usually different from having the disease."},
+HTT:{n:"Huntingtin",loc:"4p16.3",fn:"Large protein with roles in neuronal function and transport.",pw:["Neuronal transport"],d:"Huntington disease",inh:"Autosomal dominant",note:"Caused by an expanded CAG repeat; repeat length relates to age of onset. Predictive testing should involve genetic counselling."},
+LDLR:{n:"Low-density lipoprotein receptor",loc:"19p13.2",fn:"Removes LDL cholesterol from the blood by taking it into liver cells.",pw:["Cholesterol metabolism","Lipoprotein clearance"],d:"Familial hypercholesterolaemia",inh:"Autosomal dominant (semi-dominant)",note:"Treatable when identified early."},
+APOE:{n:"Apolipoprotein E",loc:"19q13.32",fn:"Transports lipids and cholesterol in blood and the brain.",pw:["Lipid transport"],d:"Late-onset Alzheimer disease (risk association)",inh:"Complex; not simple Mendelian",note:"The ε4 allele is a risk factor, not a cause. Many carriers never develop Alzheimer disease and many non-carriers do."},
+MTHFR:{n:"Methylenetetrahydrofolate reductase",loc:"1p36.22",fn:"Enzyme in folate metabolism.",pw:["Folate cycle"],d:"Rare severe enzyme deficiency",inh:"Autosomal recessive (severe deficiency)",note:"Common MTHFR variants have limited clinical use for most people."}};
+const GL={allele:"One of the alternative versions of a gene or DNA position. You inherit one from each parent.",genotype:"The pair of alleles a person carries at a position.",snp:"A single-nucleotide polymorphism: one base differs between people at a position, and it is common in the population.",variant:"Any difference from the reference genome. Many are harmless.",gc:"GC content is the share of bases that are G or C. It affects how tightly DNA strands bind.",carrier:"Someone with one altered copy of a recessive gene who usually has no symptoms.",dominant:"Autosomal dominant means one altered copy can be enough to cause a condition.",recessive:"Autosomal recessive means two altered copies are needed.",penetrance:"The share of people with a variant who actually show the condition.",fasta:"A text format: a line starting with > names the sequence, and the lines after it hold the bases.",codon:"A group of three bases that codes for one amino acid or a stop signal.",polygenic:"Influenced by many genes and the environment together.",pathogenic:"A classification meaning evidence shows a variant causes disease. “Uncertain significance” means evidence is not enough yet."};
+// routing
+const pages=$$('.sec');function route(){const p=(location.hash||'#home').slice(1);const id=pages.some(s=>s.id===p)?p:'home';pages.forEach(s=>s.classList.toggle('on',s.id===id));$$('nav a').forEach(a=>a.classList.toggle('on',a.dataset.p===id));if(id==='rep')renderRep();if(id==='fam')renderFam()}
+addEventListener('hashchange',route);
+// sequence engine
+const COMP={A:'T',T:'A',G:'C',C:'G',N:'N'};
+const CODON={};(()=>{const b='TCAG',aa='FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG';let i=0;for(const x of b)for(const y of b)for(const z of b)CODON[x+y+z]=aa[i++]})();
+function parseFasta(t){const recs=[];let cur=null;t.split(/\r?\n/).forEach(l=>{l=l.trim();if(!l)return;if(l[0]==='>'){cur={name:l.slice(1)||'unnamed',seq:''};recs.push(cur)}else{if(!cur){cur={name:'pasted sequence',seq:''};recs.push(cur)}cur.seq+=l}});return recs}
+function analyse(raw){const s=raw.toUpperCase().replace(/\s/g,'').replace(/U/g,'T');const bad=[...new Set(s.replace(/[ACGTN]/g,'').split(''))];const c={A:0,C:0,G:0,T:0,N:0};for(const ch of s)if(c[ch]!==undefined)c[ch]++;const acgt=c.A+c.C+c.G+c.T;const gc=acgt?(c.G+c.C)/acgt*100:0;
+const rc=[...s].reverse().map(x=>COMP[x]||'?').join('');let prot='';const st=s.indexOf('ATG');if(st>=0)for(let i=st;i+3<=s.length;i+=3){const a=CODON[s.slice(i,i+3)]||'X';if(a==='*')break;prot+=a}
+const win=Math.max(10,Math.min(30,Math.floor(s.length/4)));const pts=[];for(let i=0;i+win<=s.length;i+=Math.max(1,Math.floor(win/3))){const w=s.slice(i,i+win);pts.push([...w].filter(x=>x==='G'||x==='C').length/win*100)}
+return{s,bad,c,gc,rc,prot,st,pts,win}}
+function strand(el,s){el.innerHTML=[...s.slice(0,48)].map((x,i)=>`<span class="b b${'ACGT'.includes(x)?x:'N'}" style="animation-delay:${i*12}ms">${x}</span>`).join('')+(s.length>48?`<span class="mut sm" style="align-self:center">+${s.length-48}</span>`:'')}
+function stats(a){return [['Length',a.s.length+' bp'],['GC content',a.gc.toFixed(1)+'%'],['AT content',(a.s.length?100-a.gc:0).toFixed(1)+'%'],['Protein from first ATG',a.prot.length+' aa']].map(([k,v])=>`<div class="card stat"><b>${v}</b><span class="mut sm">${k}</span></div>`).join('')}
+function donut(a){const t=a.c.A+a.c.C+a.c.G+a.c.T||1;let off=0;const R=42,C=2*Math.PI*R;const segs=['A','C','G','T'].map(k=>{const f=a.c[k]/t,s=`<circle r="${R}" cx="60" cy="60" fill="none" stroke="var(--${k})" stroke-width="16" stroke-dasharray="${f*C} ${C}" stroke-dashoffset="${-off*C}" transform="rotate(-90 60 60)"/>`;off+=f;return s}).join('');return`<div class="card" style="display:flex;gap:16px;align-items:center;grid-column:1/-1"><svg width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="Base composition">${segs}<text x="60" y="66" text-anchor="middle" font-size="18" font-weight="700" fill="currentColor">${a.gc.toFixed(0)}%</text></svg><div class="sm"><b>Base mix</b><br>`+['A','C','G','T'].map(k=>`<span class="b b${k}" style="display:inline-grid;width:18px;height:18px;font-size:11px;margin:2px 4px 2px 0">${k}</span>${(a.c[k]/t*100).toFixed(0)}% `).join('')+`<br><span class="mut">Ring centre shows GC content</span></div></div>`}
+function chromo(loc){const m=loc.match(/^(\d+)([pq])(\d+\.?\d*)/);if(!m)return'';const b=Math.min(+m[3],40),x=m[2]==='p'?.46-b/40*.42:.54+b/40*.42;return`<div class="sm mut">Chromosome ${m[1]}, ${m[2]} arm (approximate position, not to scale)</div><div class="chromo"><s style="left:${(x*100).toFixed(1)}%"></s></div>`}
+function buildHelix(){const el=document.createElement('div');el.className='helix';el.setAttribute('aria-hidden','true');const P=['AT','CG','TA','GC'];el.innerHTML=Array.from({length:18},(_,i)=>{const p=P[i%4];return`<div class="rg" style="animation-delay:${-i*.18}s"><i style="background:var(--${p[0]})"></i><u></u><i style="background:var(--${p[1]})"></i></div>`}).join('');$('.hero').prepend(el)}
+function hero(){const a=analyse($('#hin').value);strand($('#hs'),a.s);$('#hstats').innerHTML=stats(a)+donut(a)}
+$('#hin').addEventListener('input',hero);
+function chart(pts){if(pts.length<2)return'';const W=600,H=110,p=(v,i)=>`${i/(pts.length-1)*W},${H-v/100*H}`;return`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="GC content across the sequence"><line x1="0" x2="${W}" y1="${H/2}" y2="${H/2}" stroke="var(--line)" stroke-dasharray="4"/><polyline fill="none" stroke="var(--teal)" stroke-width="2.5" points="${pts.map(p).join(' ')}"/></svg><div class="sm mut">GC% in a sliding window (dashed line = 50%)</div>`}
+function runSeq(){const txt=$('#sin').value;const recs=parseFasta(txt);const out=$('#sout');if(!recs.length||recs.every(r=>!r.seq)){out.innerHTML='<div class="note">No sequence found. Paste bases (A, C, G, T) or a FASTA record that starts with “>”.</div>';return}
+out.innerHTML=recs.map(r=>{const a=analyse(r.seq);const tot=a.c.A+a.c.C+a.c.G+a.c.T+a.c.N||1;const bars=['A','C','G','T'].map(k=>`<div style="width:${a.c[k]/tot*100}%;background:var(--${k})"></div>`).join('');
+return`<div class="card" style="margin-top:16px"><h3>${esc(r.name)}</h3>${a.bad.length?`<div class="note">Unexpected characters ignored in counts: ${esc(a.bad.join(' '))}. Valid DNA uses A, C, G, T (and N for unknown).</div>`:''}
+<div class="grid g4" style="margin:12px 0">${stats(a)}</div>
+<div class="bar" aria-label="Base composition">${bars}</div><div class="sm mut" style="margin:6px 0 12px">A ${a.c.A} · C ${a.c.C} · G ${a.c.G} · T ${a.c.T}${a.c.N?' · N '+a.c.N:''}</div>
+${chart(a.pts)}<label>Reverse complement</label><pre>${esc(a.rc)}</pre><label>Translation from first ATG ${a.st>=0?'(position '+(a.st+1)+')':''}</label><pre>${a.st>=0?esc(a.prot)||'Stop codon immediately.':'No ATG start codon found.'}</pre></div>`}).join('')}
+$('#srun').onclick=runSeq;$('#sf').onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>2e6){$('#sout').innerHTML='<div class="note">File is over 2 MB. Choose a smaller file.</div>';return}const r=new FileReader();r.onload=()=>{$('#sin').value=r.result;runSeq()};r.readAsText(f)};
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+// genes
+$('#gl').innerHTML=Object.keys(GENES).map(g=>`<option value="${g}">`).join('');
+function geneCard(g){const x=GENES[g];return`<div class="card"><h3>${g} <span class="tag">${x.loc}</span></h3><p class="mut" style="margin:2px 0 6px">${x.n}</p>${chromo(x.loc)}<p>${x.fn}</p><p class="sm"><b>Pathways:</b> ${x.pw.join(', ')}<br><b>Associated condition:</b> ${x.d} (${x.inh})</p><div class="note">${x.note}</div><p class="sm">Verify and go deeper: <a target="_blank" rel="noopener" href="https://www.ncbi.nlm.nih.gov/gene/?term=${g}%5Bsym%5D+AND+human%5Borgn%5D">NCBI Gene</a> · <a target="_blank" rel="noopener" href="https://www.ncbi.nlm.nih.gov/clinvar/?term=${g}%5Bgene%5D">ClinVar</a> · <a target="_blank" rel="noopener" href="https://www.ensembl.org/Multi/Search/Results?q=${g}">Ensembl</a></p></div>`}
+$('#gq').addEventListener('input',()=>{const q=$('#gq').value.trim().toUpperCase();const o=$('#gout');if(!q){o.innerHTML='';return}const hit=Object.keys(GENES).filter(g=>g.startsWith(q));o.innerHTML=hit.length?`<div class="grid g2">${hit.map(geneCard).join('')}</div>`:`<div class="note">“${esc(q)}” isn’t in this curated set. <a target="_blank" rel="noopener" href="https://www.ncbi.nlm.nih.gov/gene/?term=${encodeURIComponent(q)}%5Bsym%5D+AND+human%5Borgn%5D">Search NCBI Gene</a> instead.</div>`});
+// variants
+$('#vgo').onclick=()=>{const v=$('#vq').value.trim();const o=$('#vout');if(!v){o.innerHTML='<div class="note">Enter an rsID such as rs334 or an HGVS name.</div>';return}
+const rs=/^rs\d{1,12}$/i.test(v),hg=/^(NM_|NC_|NP_|ENST)\S*:[cgpn]\.\S+$/i.test(v);
+if(!rs&&!hg){o.innerHTML='<div class="note">That doesn’t look like an rsID (rs followed by digits) or an HGVS name (e.g. NM_000518.5:c.20A&gt;T). Check for typos.</div>';return}
+const q=encodeURIComponent(v);o.innerHTML=`<p>Recognised as <b>${rs?'a dbSNP rsID':'an HGVS expression'}</b>. Open the public records for reference and alternate alleles, classification and evidence:</p><p><a target="_blank" rel="noopener" href="https://www.ncbi.nlm.nih.gov/clinvar/?term=${q}">ClinVar</a> · <a target="_blank" rel="noopener" href="https://www.ensembl.org/Multi/Search/Results?q=${q}">Ensembl</a> · ${rs?`<a target="_blank" rel="noopener" href="https://www.ncbi.nlm.nih.gov/snp/${q}">dbSNP</a>`:''}</p><div class="note">GeneGuard does not invent annotations. What those pages say is the evidence; classifications can change.</div>`};
+// diseases
+const inhc={};Object.values(GENES).forEach(x=>{const k=/recessive/i.test(x.inh)?'Recessive':/dominant/i.test(x.inh)?'Dominant':'Complex';inhc[k]=(inhc[k]||0)+1});
+$('#dtab').insertAdjacentHTML('beforebegin','<h3>Inheritance patterns in this gene set</h3>'+Object.entries(inhc).map(([k,v])=>`<div class="hb"><span>${k}</span><div style="width:${v*14}%"></div><b>${v}</b></div>`).join('')+'<div style="height:12px"></div>');
+$('#dtab').innerHTML='<tr><th>Gene</th><th>Condition</th><th>Inheritance</th></tr>'+Object.entries(GENES).map(([g,x])=>`<tr><td><b>${g}</b></td><td>${x.d}</td><td>${x.inh}</td></tr>`).join('');
+// family
+let fam=store.get('gg_fam',[]);const ORDER=['Grandparent','Parent','Aunt/Uncle','Self','Sibling','Child'];
+function renderFam(){const t=$('#ftree');if(!fam.length){t.innerHTML='<p class="mut">No relatives yet. Add yourself first, then parents and siblings.</p>';return}
+const rows=[['Grandparent'],['Parent','Aunt/Uncle'],['Self','Sibling'],['Child']];t.innerHTML=rows.map(r=>{const m=fam.map((x,i)=>({...x,i})).filter(x=>r.includes(x.rel));return m.length?`<div class="gen">${m.map(x=>`<div class="mem"><b>${esc(x.name||x.rel)}</b><div class="sm mut">${x.rel}</div>${x.cond?`<div class="tag syn">${esc(x.cond)}</div>`:''}<div><button class="btn ghost sm" data-rm="${x.i}" aria-label="Remove ${esc(x.name||x.rel)}">Remove</button></div></div>`).join('')}</div>`:''}).join('')+'<p class="sm mut">Conditions are as reported by you. A tree shows patterns to discuss with a clinician; it is not a risk calculation.</p>';
+$$('[data-rm]').forEach(b=>b.onclick=()=>{fam.splice(+b.dataset.rm,1);store.set('gg_fam',fam);renderFam()})}
+$('#fadd').onclick=()=>{fam.push({rel:$('#fr').value,name:$('#fnm').value.trim().slice(0,40),cond:$('#fc').value.trim().slice(0,60)});store.set('gg_fam',fam);$('#fnm').value=$('#fc').value='';renderFam()};
+// assistant
+function say(t,me){const c=$('#chat');const d=document.createElement('div');d.className='msg'+(me?' me':'');d.textContent=t;c.appendChild(d);c.scrollTop=c.scrollHeight}
+function answer(q){const L=q.toLowerCase();const g=Object.keys(GENES).find(k=>new RegExp('\\b'+k.toLowerCase()+'\\b').test(L));if(g){const x=GENES[g];return`${g} (${x.n}) sits at ${x.loc}. ${x.fn} Associated condition: ${x.d}, ${x.inh.toLowerCase()}. ${x.note}`}
+const t=Object.keys(GL).find(k=>L.includes(k));if(t)return GL[t];if(/diagnos|will i get|my risk|should i/.test(L))return'I can’t diagnose or predict your health. A genetic counsellor or doctor can interpret real results in the context of your history.';return'I don’t have a reliable answer to that in my built-in glossary. Try a term like allele, carrier or penetrance, or a gene symbol such as CFTR.'}
+$('#ago').onclick=()=>{const q=$('#aq').value.trim();if(!q)return;say(q,1);say(answer(q));$('#aq').value=''};$('#aq').onkeydown=e=>{if(e.key==='Enter')$('#ago').click()};
+say('Hi. Ask me about a genetics term or one of the genes in the explorer. I’m an offline educational helper, not a clinician.');
+// profile + report
+let marks=store.get('gg_marks',[{g:'CFTR',n:'Demo marker 1'},{g:'APOE',n:'Demo marker 2'},{g:'HBB',n:'Demo marker 3'}]);
+$('#mg').innerHTML=Object.keys(GENES).map(g=>`<option>${g}</option>`).join('');
+function renderRep(){$('#rbody').innerHTML=`<h3>GeneGuard educational report</h3><p class="sm mut">Generated ${new Date().toLocaleDateString()} · <span class="tag syn">Synthetic demo data</span></p>${marks.length?marks.map((m,i)=>`<div style="margin:14px 0"><b>${esc(m.n)}</b> <span class="tag">${m.g}</span> <button class="btn ghost sm noprint" data-dm="${i}">Remove</button><p class="sm">${GENES[m.g].fn} Associated: ${GENES[m.g].d} (${GENES[m.g].inh.toLowerCase()}).</p></div>`).join(''):'<p class="mut">No markers yet. Add one above.</p>'}<h3>Limitations</h3><p class="sm">This report is educational. Associations are not diagnoses or predictions. Marker entries are synthetic labels, not test results. Discuss real results with a qualified genetic counsellor. Sources: NCBI Gene, ClinVar, Ensembl.</p>`;
+$$('[data-dm]').forEach(b=>b.onclick=()=>{marks.splice(+b.dataset.dm,1);saveM()})}
+function saveM(){store.set('gg_marks',marks);$('#nm').textContent=marks.length;renderRep()}
+$('#madd').onclick=()=>{marks.push({g:$('#mg').value,n:($('#mn').value.trim()||'Demo marker').slice(0,40)});$('#mn').value='';saveM()};
+$('#rprint').onclick=()=>{try{window.print()}catch(e){alert('Printing is blocked here. Use your browser’s print command (Ctrl/Cmd+P).')}};
+// settings
+function theme(v){if(v==='auto')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme',v)}
+const tv=store.get('gg_theme','auto');$('#th').value=tv;theme(tv);$('#th').onchange=e=>{theme(e.target.value);store.set('gg_theme',e.target.value)};
+$('#cons').checked=store.get('gg_cons',false);$('#cons').onchange=e=>store.set('gg_cons',e.target.checked);
+$('#wipe').onclick=()=>{if(!confirm('Delete markers, family history and settings from this browser?'))return;try{['gg_fam','gg_marks','gg_theme','gg_cons'].forEach(k=>localStorage.removeItem(k))}catch(e){}fam=[];marks=[];theme('auto');$('#th').value='auto';$('#cons').checked=false;saveM();renderFam()};
+$('#nm').textContent=marks.length;buildHelix();hero();route();
+</script></body></html>
